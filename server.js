@@ -1,7 +1,7 @@
 import express from "express";
 import mySql from "mysql2/promise";
 import { config } from "dotenv";
-import bcrypt from "bcrypt"; //To save the passwords encryptly
+import bcrypt from "bcryptjs"; //To save the passwords encryptly
 import bodyParser from "body-parser";
 import session from "express-session";
 import passport from "passport";
