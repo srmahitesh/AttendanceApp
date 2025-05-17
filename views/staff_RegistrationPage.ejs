@@ -101,29 +101,16 @@
   <%- include('Header') %>
 
   <div class="form-container">
-    <h1>Register Student</h1>
+    <h1>Staff Registration</h1>
 
-    <form action="/submit" method="post">
+    <form action="/staffDetails" method="post">
+      <label for="name">Full Name:</label>
+      <input type="text" name="name" maxlength="60" required>
 
-
-      <label for="f_name">First Name:</label>
-      <input type="text" name="f_name" maxlength="30" required>
-
-      <label for="l_name">Last Name:</label>
-      <input type="text" name="l_name" maxlength="30">
-
-      <label for="father_name">Father Name:</label>
-      <input type="text" name="father_name" maxlength="60" required>
-
-      <label for="mother_name">Mother Name:</label>
-      <input type="text" name="mother_name" maxlength="60" required>
-
-
-      <label for="roll_no">Board Roll No. :</label>
-      <input type="text" name="roll_no" maxlength="10" required>
 
       <label for="dob">Birth Date:</label>
       <input type="date" name="dob" required>
+
 
       <label for="gender">Gender:</label>
       <select name="gender" required>
@@ -132,28 +119,16 @@
         <option value="Others">Others</option>
       </select>
 
-      <label for="aadhar_no">Aadhar No.:</label>
-      <input type="text" name="aadhar_no" maxlength="12" required>
 
-      <label for="contact_no">Student Contact Number:</label>
+      <label for="id">Employee ID:</label>
+      <input type="text" name="id" maxlength="12" required>
+
+      <label for="contact_no">Contact Number:</label>
       <input type="tel" name="contact_no" required>
 
-      <label for="email_add">Student Email Address:</label>
+      <label for="email_add">Email Address:</label>
       <input type="email" name="email_add" required>
 
-      <label for="course">Course:</label>
-      <select name="course">
-        <% for(let i = 0; i < courses.length; i++){ %>
-          <option value="<%=courses[i].course_id%>"> <%= courses[i].course_name%> - <%=courses[i].duration%> Years </option>
-        <%}%>
-      </select>
-
-      <label for="sem">Current Semester:</label>
-      <select name="sem">
-        <% for(let i = 1; i <= 6; i++){ %>
-          <option value="<%=i%>"> <%=i%></option>
-        <%}%>
-      </select>
 
       <label for="house_no">House No.:</label>
       <input type="text" name="house_no" maxlength="25" required>
@@ -175,6 +150,12 @@
 
       <label for="pin_code">Zip/Pin Code:</label>
       <input type="number" name="pin_code" maxlength="6" required>
+
+
+      <label for="password">Password:</label>
+      <input type="password" name="password" required>
+
+      <input type="hidden" value="0" name="status">
 
       <input type="submit" value="Submit">
     </form>

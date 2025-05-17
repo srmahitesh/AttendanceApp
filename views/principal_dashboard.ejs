@@ -1,0 +1,131 @@
+<%- include('Header') %>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+    <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: Arial, sans-serif;
+    }
+
+    .carousel-inner img {
+      width: 100%;
+      height: 100%;
+    }
+
+    .login-container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 50px;
+    }
+
+    .login-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 120px;
+      height: 150px;
+      border: 2px solid #007bff;
+      border-radius: 10px;
+      padding: 10px;
+      background-color: #ffffff;
+      transition: transform 0.3s ease;
+    }
+
+    .login-item img {
+      width: 50px;
+      height: 50px;
+      margin-bottom: 10px;
+    }
+
+    .login-item p {
+      font-size: 14px;
+      font-weight: bold;
+      color: #007bff;
+      margin-top: 5px;
+    }
+
+    .login-item:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+    }
+
+    .login-item:active {
+      transform: scale(0.95);
+    }
+
+    /* Heading Style */
+    .attendance-heading {
+      text-align: center;
+      font-size: 36px;
+      font-weight: bold;
+      margin-top: 50px;
+      color: #007bff;
+    }
+
+  </style>
+
+</head>
+<body>
+
+
+  <% if(locals.user){ %>
+  <h2>Hello, <%= user.name %></h2>
+  <% } %>
+
+
+
+<div class="login-container">
+
+  <a href="/faculty/requests">
+    <div class="login-item">
+      <img src="https://icon-library.com/images/pending-icon/pending-icon-4.jpg" alt="pending_icon">
+      <p>Pending Registrations</p>
+    </div>
+  </a>
+
+
+  <a href="/parents">
+    <div class="login-item">
+      <img src="https://www.clipartmax.com/png/middle/438-4384961_resource-my-attendance-svg-png-icon-free-download-attendance-white-icon-png.png" alt="individual_att_icon">
+      <p>Individual Attendance</p>
+    </div>
+  </a>
+
+
+  <a href="/attendance-summary">
+    <div class="login-item">
+      <img src="https://www.shutterstock.com/image-vector/effective-teamwork-icon-black-thin-600nw-2227180861.jpg" alt="each_att_icon">
+      <p>Each Student Attendance</p>
+    </div>
+  </a>
+
+
+
+    </div>
+  </a>
+</div>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+<%- include('Footer') %>

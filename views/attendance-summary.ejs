@@ -1,0 +1,40 @@
+<%- include('Header') %>
+
+<h2 class="text-center my-4">Attendance Summary</h2>
+
+<div class="container">
+  <% if (locals.data && data.length > 0) { %>
+    <table class="table table-bordered table-striped">
+      <thead class="table-dark">
+        <tr>
+          <th>Roll No</th>
+          <th>Name</th>
+          <th>Semester</th>
+          <th>Course</th>
+          <th>Total Attendance</th>
+          <th>Total Present</th>
+          <th>Percentage (%)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% data.forEach(row => { %>
+          <tr>
+            <td><%= row.roll_no %></td>
+            <td><%= row.first_name %> <%= row.last_name %></td>
+            <td><%= row.sem %></td>
+            <td><%= row.course_name %></td>
+            <td><%= row.total_attendance %></td>
+            <td><%= row.total_present %></td>
+            <td><%= row.percentage %> %</td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } else { %>
+    <div class="alert alert-warning text-center">
+      No attendance data available.
+    </div>
+  <% } %>
+</div>
+
+<%- include('Footer') %>

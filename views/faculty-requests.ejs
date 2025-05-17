@@ -1,0 +1,39 @@
+<%- include('Header') %>
+
+<h2 class="text-center my-4">Pending Faculty Requests</h2>
+
+<div class="container">
+  <% if (data.length > 0) { %>
+    <table class="table table-bordered table-striped">
+      <thead class="table-dark">
+        <tr>
+          <th>Faculty ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% data.forEach(row => { %>
+          <tr>
+            <td><%= row.id %></td>
+            <td><%= row.name %></td>
+            <td><%= row.email_add %></td>
+            <td>
+              <form action="/faculty/accept/<%= row.id %>" method="POST" style="display:inline;">
+                <button class="btn btn-success btn-sm" onclick="return confirm('Accept this faculty?')">Accept</button>
+              </form>
+              <form action="/faculty/reject/<%= row.id %>" method="POST" style="display:inline;">
+                <button class="btn btn-danger btn-sm" onclick="return confirm('Reject this faculty?')">Reject</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } else { %>
+    <div class="alert alert-info text-center">No pending faculty requests.</div>
+  <% } %>
+</div>
+
+<%- include('Footer') %>
