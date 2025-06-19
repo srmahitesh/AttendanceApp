@@ -39,10 +39,10 @@ async function activateDb() {
       password: process.env.db_password,
       port: process.env.db_port,
     });
-    console.log(`Connection Success with DB`);
+
     return conn;
   } catch (error) {
-    console.log(`Unable to Connect with Db, ${error.stack}`);
+
     throw error;
   }
 }
@@ -58,10 +58,10 @@ app.get("/student_register", async (req, res) => {
   try {
     conn = await activateDb();
     let [result] = await conn.query(`SELECT * FROM courses`);
-    console.log(result);
+
     res.render("registrationPage.ejs", { courses: result });
   } catch (err) {
-    console.log("Error While Fetching courses " + err.stack);
+
     res.status(403).send("Unable to Connect to DB");
   } finally {
     if (conn) conn.end();
@@ -75,7 +75,7 @@ app.get("/staff_register", async (req, res) => {
 
 //TO SAVE THA DATA OF NEWLY REGISTERED STUDENTS AND CHECKING IF HE IS REALLY NEW OR EXISTING ONE WITH PRIMARY KEY AS AADHAR
 app.post("/submit", async (req, res) => {
-  console.log(req.body);
+
   let data = req.body;
   let conn;
 
@@ -86,7 +86,6 @@ app.post("/submit", async (req, res) => {
     );
     if (duplicateData.length > 0) {
       let [{ roll_no }] = duplicateData[0];
-      console.log(duplicateData);
       res.send(
         `<h1>Student with Same ID already exists (Roll NO. ${roll_no})</h1>`
       );
@@ -98,9 +97,9 @@ app.post("/submit", async (req, res) => {
           let [result] = await conn.query(
             `SELECT roll_no FROM students WHERE aadhar_no = ${data.aadhar_no}`
           );
-          console.log(result);
+
           let assign_roll_no = result[0].roll_no;
-          console.log(assign_roll_no);
+
 
           try {
             let pass =
@@ -109,17 +108,14 @@ app.post("/submit", async (req, res) => {
               data.pin_code +
               data.aadhar_no.substr(8, 12); // Corrected substring end index
 
-            console.log(pass);
             let hashedPassword;
             try {
               hashedPassword = await bcrypt.hash(pass, saltRounds);
             } catch (error) {
-              console.log(`Unable to hash the password`);
               return res.send(
                 `Unable to create an account, rest assured Registration Success with ${assign_roll_no}.`
               );
             }
-            console.log(hashedPassword);
 
             await conn.query(
               `INSERT INTO studentCred VALUES(?, ?)`,
@@ -157,7 +153,6 @@ app.post("/submit", async (req, res) => {
 
 app.post("/staffDetails", async (req, res) => {
   const user = req.body;
-  console.log(user);
   let conn;
 
   const queryInsert = `INSERT INTO faculty (id, name, dob, gender, contact_no, email_add, house_no, street_add, city, distt, state, country, pin_code, password, status)
@@ -234,11 +229,6 @@ app.post(
 
 app.get("/student_dashboard", ensureAuthenticated, (req, res) => {
   if (req.user.role === "student") {
-    console.log(
-      `This data is being sent to student dashboard page initially ${JSON.stringify(
-        req.user
-      )}`
-    );
     res.render("student_dashboard.ejs", { user: req.user });
   } else {
     res.redirect("/");
@@ -257,16 +247,12 @@ app.post(
     failureRedirect: "/principal_login",
   }),
   (req, res) => {
-    console.log("techer Authenitcation Success");
     res.redirect("/principal_dashboard");
   }
 );
 
 app.get("/principal_dashboard", ensureAuthenticated, (req, res) => {
   if (req.user.role === "principal") {
-    console.log(
-      `This data is being sent to principal dashboard page initially ${req.user}`
-    );
     res.render("principal_dashboard.ejs", { user: req.user });
   } else {
     res.redirect("/principal_login");
@@ -283,16 +269,12 @@ app.post(
   "/verify_teach_login",
   passport.authenticate("teacher-local", { failureRedirect: "/teach_login" }),
   (req, res) => {
-    console.log("techer Authenitcation Success");
     res.redirect("/teacher_dashboard");
   }
 );
 
 app.get("/teacher_dashboard", ensureAuthenticated, (req, res) => {
   if (req.user.role === "teacher") {
-    console.log(
-      `This data is being sent to teacher dashboard page initially ${req.user}`
-    );
     res.render("teacher_dashboard.ejs", { user: req.user });
   } else {
     res.redirect("/");
@@ -309,7 +291,6 @@ app.get("/mark_attendance", ensureAuthenticated, (req, res) => {
 
 app.get("/getStudents", async (req, res) => {
   const { stream, sem } = req.query; // Extract query parameters
-  console.log(`Stream: ${stream}, Semester: ${sem}`); // Log for debugging
   let conn;
 
   try {
@@ -337,9 +318,6 @@ app.get("/getStudents", async (req, res) => {
 
 app.get("/getSubjects", async (req, res) => {
   const { stream, sem } = req.query;
-  console.log(
-    `Fetching Subjects & got credential: Course_id ${stream} Sem: ${sem}`
-  );
   let conn;
   try {
     conn = await activateDb();
@@ -356,7 +334,6 @@ app.get("/getSubjects", async (req, res) => {
 
 app.post("/submitAttendance", ensureAuthenticated, async (req, res) => {
   const attendanceData = req.body;
-  console.log("Received attendance data:", attendanceData); // Log the received data
   let conn;
 
   if (
@@ -372,13 +349,10 @@ app.post("/submitAttendance", ensureAuthenticated, async (req, res) => {
 
   try {
     conn = await activateDb();
-    console.log("Database connection established."); // Log successful DB connection
 
     const promises = attendanceData.map((entry) => {
       const { roll_no, status, sub_name, faculty_id, faculty_name } = entry;
 
-      // Log each entry being processed
-      console.log("Processing entry:", entry);
 
       if (!roll_no || !status || !sub_name || !faculty_id || !faculty_name) {
         console.error("Incomplete attendance entry:", entry); // Log incomplete entry
@@ -392,7 +366,6 @@ app.post("/submitAttendance", ensureAuthenticated, async (req, res) => {
     });
 
     await Promise.all(promises);
-    console.log("All attendance entries have been successfully saved."); // Log success
 
     res
       .status(200) 
@@ -501,7 +474,6 @@ app.get("/getAttendance", ensureAuthenticated, async (req, res) => {
     const params = [roll_no];
 
     if (subject) {
-      console.log("Specific sub req: " + subject);
       query += ` AND subject_name = ?`;
       params.push(subject);
     }
@@ -593,7 +565,6 @@ app.get('/faculty/requests', ensureAuthenticated, async (req, res) => {
   try {
     const conn = await activateDb();
     const [result] = await conn.query(sql);
-    console.log(result);
     conn.close();
     res.render('faculty-requests.ejs', { data: result });
   } catch (err) {
@@ -613,7 +584,6 @@ app.post('/faculty/accept/:id', ensureAuthenticated, async (req, res) => {
     conn.close();
     res.redirect('/faculty/requests');
   } catch (err) {
-    console.log(err.stack);
     res.status(500).send("Error accepting faculty.");
   }
 });
@@ -631,7 +601,6 @@ app.post('/faculty/reject/:id', ensureAuthenticated, async (req, res) => {
     conn.close();
     res.redirect('/faculty/requests');
   } catch (err) {
-    console.log(err.stack);
     res.status(500).send("Error rejecting faculty.");
   }
 });
@@ -642,7 +611,6 @@ app.post('/faculty/reject/:id', ensureAuthenticated, async (req, res) => {
 
 app.listen(AppPort, () => {
   console.log(`App is listening at the PORT ${AppPort}`);
-  console.log(`http://localhost:${AppPort}`);
 });
 
 passport.use(
@@ -750,7 +718,7 @@ passport.use(
         }
 
         const user = rows[0];
-        console.log(user);
+
         if (user.password === password) {
           user.role = req.body.role; // Attach role  May Update
           return done(null, user);
@@ -769,7 +737,6 @@ passport.use(
 
 passport.serializeUser((user, done) => {
   const key = { id: user.roll_no || user.id, role: user.role };
-  console.log(`Serializer Key: ${JSON.stringify(key)}`);
   done(null, key);
 });
 
