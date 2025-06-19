@@ -120,7 +120,7 @@
 
 
       <label for="roll_no">Board Roll No. :</label>
-      <input type="text" name="roll_no" maxlength="10" required>
+      <input type="text" name="roll_no" maxlength="13" required>
 
       <label for="dob">Birth Date:</label>
       <input type="date" name="dob" required>
@@ -150,7 +150,7 @@
 
       <label for="sem">Current Semester:</label>
       <select name="sem">
-        <% for(let i = 1; i <= 6; i++){ %>
+        <% for(let i = 1; i <= 8; i++){ %>
           <option value="<%=i%>"> <%=i%></option>
         <%}%>
       </select>
